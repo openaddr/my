@@ -1,0 +1,21 @@
+[package]
+name = "rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+#godot = { git = "https://github.com/godot-rust/gdext", branch = "master" , features = ["experimental-threads"]}
+#gdext_coroutines = { package = "gdext_coroutines", git = "https://github.com/Houtamelo/gdext_coroutines", features = ["async"] }
+
+godot = {version = "0.2.4" , features = ["experimental-threads"]}
+gdext_coroutines = {version = "0.7.1" , features = ["async"]}
+
+rand = "0.9.0"
+smol = "2.0.2"
+async-compat = "0.2.4"
+
+[patch.crates-io]
+godot = { git = "https://github.com/godot-rust/gdext.git", branch = "master" }
+
+[lib]
+crate-type = ["cdylib"]# 将此crate编译为动态C库 （dynamic C library）.

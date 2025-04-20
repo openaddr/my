@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyhn4j3l4o7fd"]
+
+[ext_resource type="Texture2D" uid="uid://cqp1w1fnrgo07" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_kln2b"]
+[ext_resource type="PackedScene" uid="uid://jxldlahj1y8j" path="res://Scenes/Player.tscn" id="2_rgh2o"]
+[ext_resource type="PackedScene" uid="uid://b31fdqo1oegi4" path="res://Scenes/monster.tscn" id="3_pbw6q"]
+[ext_resource type="FontFile" uid="uid://bnxek6s3a4yjd" path="res://AssetBundle/HarmonyOS_Sans_SC_Regular.ttf" id="4_rgh2o"]
+
+[node name="GameManager" type="GameManager" node_paths=PackedStringArray("score_label", "game_over_label")]
+monster_scene = ExtResource("3_pbw6q")
+score_label = NodePath("CanvasLayer/Label")
+game_over_label = NodePath("CanvasLayer/Game Over")
+y_sort_enabled = true
+
+[node name="Background 1" type="Sprite2D" parent="."]
+position = Vector2(-120, 0)
+texture = ExtResource("1_kln2b")
+metadata/_edit_lock_ = true
+
+[node name="Background 2" type="Sprite2D" parent="."]
+position = Vector2(120, 0)
+texture = ExtResource("1_kln2b")
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.4, 2.4)
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." instance=ExtResource("2_rgh2o")]
+position = Vector2(-219, 79)
+metadata/_edit_lock_ = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 189.0
+offset_bottom = 73.0
+theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_font_sizes/font_size = 48
+text = "得分：0"
+
+[node name="Game Over" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -82.5
+offset_right = 240.0
+offset_bottom = 82.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.896708, 1, 0.885528, 1)
+theme_override_colors/font_outline_color = Color(0.402422, 0.624366, 0.313088, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 120
+text = "游戏结束"
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

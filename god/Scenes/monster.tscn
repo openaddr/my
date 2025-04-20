@@ -1,0 +1,143 @@
+[gd_scene load_steps=20 format=3 uid="uid://b31fdqo1oegi4"]
+
+[ext_resource type="Texture2D" uid="uid://baqsad3h51628" path="res://AssetBundle/Sprites/SlimerDeath.png" id="1_i44lo"]
+[ext_resource type="Texture2D" uid="uid://tx5837dfk4g" path="res://AssetBundle/Sprites/Slimer.png" id="1_xhoai"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hyvb2"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(0, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujuxu"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(64, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cyu0s"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(128, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ks7b"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(192, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bua6k"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(256, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_auidl"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(320, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ko0n3"]
+atlas = ExtResource("1_i44lo")
+region = Rect2(384, 0, 64, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrqeg"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(0, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ga5te"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(41, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vr0w3"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(82, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6tndq"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(123, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ngjm"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(164, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhkt7"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(205, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3r7jw"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(246, 0, 41, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rux75"]
+atlas = ExtResource("1_xhoai")
+region = Rect2(287, 0, 41, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_481d3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hyvb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujuxu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cyu0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ks7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bua6k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_auidl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ko0n3")
+}],
+"loop": false,
+"name": &"death",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrqeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ga5te")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vr0w3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6tndq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ngjm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhkt7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3r7jw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rux75")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iyrhi"]
+
+[node name="Monster" type="Monster"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_481d3")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 9)
+shape = SubResource("CircleShape2D_iyrhi")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+position = Vector2(0, 8.5)
+scale = Vector2(1.95, 1.75)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_screen_exited"]
