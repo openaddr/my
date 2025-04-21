@@ -8,9 +8,13 @@ use godot::prelude::*;
 #[class(init, base=Area2D)]
 pub struct Monster {
     base: Base<Area2D>,
-    #[export]
+
     #[init(val = -50.0)]
     speed: f32,
+    #[init(node = "AnimatedSprite2D")]
+    animator: OnReady<Gd<AnimatedSprite2D>>,
+    #[init(node = "CollisionShape2D")]
+    collision: OnReady<Gd<CollisionShape2D>>,
 }
 
 #[godot_api]
@@ -36,17 +40,12 @@ impl Monster {
     }
 
     fn on_dead(&mut self) {
-        let mut animator = self
-            .base()
-            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");
-        animator.set_animation("death");
-        let collision = self
-            .base()
-            .get_node_as::<CollisionShape2D>("CollisionShape2D");
+        self.animator.set_animation("death");
+        let collision = self.collision.to_godot();
         self.base_mut().remove_child(&collision);
         self.speed = 0.0;
         let mut gd = self.to_gd();
-        animator
+        self.animator
             .signals()
             .animation_finished()
             .connect(move || gd.queue_free());

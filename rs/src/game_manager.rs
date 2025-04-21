@@ -7,17 +7,14 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
 pub struct GameManager {
-    // #[export]
-    // monster_scene: Option<Gd<PackedScene>>,
-
-    #[init(load= "res://Scenes/monster.tscn")]
+    #[init(load = "res://Scenes/monster.tscn")]
     monster_scene: OnReady<Gd<PackedScene>>,
 
-    #[export]
-    score_label: Option<Gd<Label>>,
+    #[init(node = "CanvasLayer/Label")]
+    score_label: OnReady<Gd<Label>>,
 
-    #[export]
-    game_over_label: Option<Gd<Label>>,
+    #[init(node = "CanvasLayer/Game Over")]
+    game_over_label: OnReady<Gd<Label>>,
 
     base: Base<Node2D>,
 }
@@ -25,7 +22,6 @@ pub struct GameManager {
 const MONSTER_SPAWN_POSITION_Y_MAX: f64 = 115.0;
 const MONSTER_SPAWN_POSITION_Y_MIN: f64 = 30.0;
 const MONSTER_SPAWN_POSITION_X: f32 = 256.0;
-
 
 #[godot_api]
 impl GameManager {
@@ -41,9 +37,7 @@ impl GameManager {
 
     fn spawn_monster(&self) {
         godot_print!("生成怪物");
-        let mut monster = self
-            .monster_scene
-            .instantiate_as::<Monster>();
+        let mut monster = self.monster_scene.instantiate_as::<Monster>();
         monster.set_position(Vector2::new(
             MONSTER_SPAWN_POSITION_X,
             randf_range(MONSTER_SPAWN_POSITION_Y_MIN, MONSTER_SPAWN_POSITION_Y_MAX) as real,
@@ -64,19 +58,16 @@ impl GameManager {
 
     fn update_score_label(&mut self) {
         self.score_label
-            .clone()
-            .unwrap()
             .set_text(&format!("得分：{}", global().score));
     }
 
     pub fn show_game_over(&mut self) {
-        self.game_over_label.clone().unwrap().set_visible(true);
+        self.game_over_label.clone().set_visible(true);
     }
 }
 
 #[godot_api]
 impl INode2D for GameManager {
-    
     fn process(&mut self, delta: f64) {
         self.update_wait_time(delta);
         self.update_score_label()

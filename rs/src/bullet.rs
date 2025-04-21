@@ -6,9 +6,11 @@ use godot::prelude::*;
 struct Bullet {
     base: Base<Area2D>,
 
-    #[export]
     #[init(val = 300.0)]
     speed: f32,
+
+    #[init(node = "VisibleOnScreenNotifier2D")]
+    visible_on_screen: OnReady<Gd<VisibleOnScreenNotifier2D>>,
 }
 
 #[godot_api]
@@ -20,15 +22,10 @@ impl IArea2D for Bullet {
     }
 
     fn ready(&mut self) {
-        let base = self.base();
-        let mut visible_on_screen =
-            base.get_node_as::<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D");
         let mut gd = self.to_gd();
-        visible_on_screen
+        self.visible_on_screen
             .signals()
             .screen_exited()
-            .connect(move || {
-                gd.queue_free()
-            });
+            .connect(move || gd.queue_free());
     }
 }

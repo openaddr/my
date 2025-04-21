@@ -1,12 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyhn4j3l4o7fd"]
+[gd_scene load_steps=4 format=3 uid="uid://cyhn4j3l4o7fd"]
 
 [ext_resource type="Texture2D" uid="uid://cqp1w1fnrgo07" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_kln2b"]
 [ext_resource type="PackedScene" uid="uid://jxldlahj1y8j" path="res://Scenes/Player.tscn" id="2_rgh2o"]
-[ext_resource type="PackedScene" uid="uid://b31fdqo1oegi4" path="res://Scenes/monster.tscn" id="3_pbw6q"]
 [ext_resource type="FontFile" uid="uid://bnxek6s3a4yjd" path="res://AssetBundle/HarmonyOS_Sans_SC_Regular.ttf" id="4_rgh2o"]
 
 [node name="GameManager" type="GameManager" node_paths=PackedStringArray("score_label", "game_over_label")]
-monster_scene = ExtResource("3_pbw6q")
 score_label = NodePath("CanvasLayer/Label")
 game_over_label = NodePath("CanvasLayer/Game Over")
 y_sort_enabled = true

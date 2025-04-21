@@ -1,6 +1,6 @@
-use crate::game::{GameState, global, global_mut};
+use crate::game::{global, global_mut, GameState};
 use crate::game_manager::GameManager;
-use gdext_coroutines::prelude::{StartCoroutine, seconds};
+use gdext_coroutines::prelude::{seconds, StartCoroutine};
 use godot::classes::*;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -13,13 +13,12 @@ pub struct Player {
     #[init(val = 100.0)]
     speed: f32,
 
-    #[export]
-    bullet_scene: Option<Gd<PackedScene>>,
+    #[init(load = "res://Scenes/bullet.tscn")]
+    bullet_scene: OnReady<Gd<PackedScene>>,
 }
 
 #[godot_api]
 impl Player {
-    
     #[func]
     fn _on_fire(&self) {
         if self.base().get_velocity() != Vector2::ZERO || global().state == GameState::Over {
@@ -27,13 +26,8 @@ impl Player {
         }
         let mut audio = self.base().get_node_as::<AudioStreamPlayer>("FireSound");
         audio.play();
-        let mut bullet: Gd<Node2D> = self
-            .bullet_scene
-            .clone()
-            .unwrap()
-            .instantiate_as::<Node2D>();
+        let mut bullet: Gd<Node2D> = self.bullet_scene.instantiate_as::<Node2D>();
         bullet.set_position(self.base().get_position() + Vector2::new(6.0, 6.0));
-        
 
         self.base()
             .get_tree()
@@ -64,10 +58,10 @@ impl Player {
             .cast::<GameManager>();
         let mut animator = self
             .base()
-            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");
+            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D"); // todo  onReady
         let collision = self
             .base()
-            .get_node_as::<CollisionShape2D>("CollisionShape2D");
+            .get_node_as::<CollisionShape2D>("CollisionShape2D"); // todo  onReady
         self.base_mut().remove_child(&collision);
         animator.set_animation("over");
         global_mut().state = GameState::Over;
@@ -93,7 +87,7 @@ impl ICharacterBody2D for Player {
         };
         let mut animator = self
             .base()
-            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");
+            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");  // todo onReady
         animator.set_animation(animation);
 
         self.base_mut().set_velocity(v);
