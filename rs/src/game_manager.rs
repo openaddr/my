@@ -7,8 +7,11 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
 pub struct GameManager {
-    #[export]
-    monster_scene: Option<Gd<PackedScene>>,
+    // #[export]
+    // monster_scene: Option<Gd<PackedScene>>,
+
+    #[init(load= "res://Scenes/monster.tscn")]
+    monster_scene: OnReady<Gd<PackedScene>>,
 
     #[export]
     score_label: Option<Gd<Label>>,
@@ -37,10 +40,9 @@ impl GameManager {
     }
 
     fn spawn_monster(&self) {
+        godot_print!("生成怪物");
         let mut monster = self
             .monster_scene
-            .clone()
-            .unwrap()
             .instantiate_as::<Monster>();
         monster.set_position(Vector2::new(
             MONSTER_SPAWN_POSITION_X,
