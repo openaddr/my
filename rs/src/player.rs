@@ -1,6 +1,6 @@
-use crate::game::{global, global_mut, GameState};
+use crate::game::{GameState, global, global_mut};
 use crate::game_manager::GameManager;
-use gdext_coroutines::prelude::{seconds, StartCoroutine};
+use gdext_coroutines::prelude::{StartCoroutine, seconds};
 use godot::classes::*;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -15,17 +15,25 @@ pub struct Player {
 
     #[init(load = "res://Scenes/bullet.tscn")]
     bullet_scene: OnReady<Gd<PackedScene>>,
+
+    #[init(node = "AnimatedSprite2D")]
+    animator: OnReady<Gd<AnimatedSprite2D>>,
+
+    #[init(node = "CollisionShape2D")]
+    collision: OnReady<Gd<CollisionShape2D>>,
+
+    #[init(node = "FireSound")]
+    fire_audio: OnReady<Gd<AudioStreamPlayer>>,
 }
 
 #[godot_api]
 impl Player {
     #[func]
-    fn _on_fire(&self) {
+    fn _on_fire(&mut self) {
         if self.base().get_velocity() != Vector2::ZERO || global().state == GameState::Over {
             return;
         }
-        let mut audio = self.base().get_node_as::<AudioStreamPlayer>("FireSound");
-        audio.play();
+        self.fire_audio.play();
         let mut bullet: Gd<Node2D> = self.bullet_scene.instantiate_as::<Node2D>();
         bullet.set_position(self.base().get_position() + Vector2::new(6.0, 6.0));
 
@@ -56,14 +64,9 @@ impl Player {
             .get_current_scene()
             .unwrap()
             .cast::<GameManager>();
-        let mut animator = self
-            .base()
-            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D"); // todo  onReady
-        let collision = self
-            .base()
-            .get_node_as::<CollisionShape2D>("CollisionShape2D"); // todo  onReady
+        let collision = self.collision.to_godot();
         self.base_mut().remove_child(&collision);
-        animator.set_animation("over");
+        self.animator.set_animation("over");
         global_mut().state = GameState::Over;
         gm.bind_mut().show_game_over();
     }
@@ -85,10 +88,7 @@ impl ICharacterBody2D for Player {
         } else {
             "idle" // 静止时播放idle动画
         };
-        let mut animator = self
-            .base()
-            .get_node_as::<AnimatedSprite2D>("AnimatedSprite2D");  // todo onReady
-        animator.set_animation(animation);
+        self.animator.set_animation(animation);
 
         self.base_mut().set_velocity(v);
         self.base_mut().move_and_slide();

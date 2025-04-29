@@ -1,8 +1,11 @@
-use crate::game::global;
+use crate::game::{global, GameState};
 use crate::monster::Monster;
+use crate::player::Player;
 use godot::classes::{Label, Timer};
 use godot::global::{clampf, randf_range};
 use godot::prelude::*;
+use smol::lock::RwLock;
+use std::sync::LazyLock;
 
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
@@ -16,6 +19,12 @@ pub struct GameManager {
     #[init(node = "CanvasLayer/Game Over")]
     game_over_label: OnReady<Gd<Label>>,
 
+    #[init(node = "Player")]
+    player: OnReady<Gd<Player>>,
+
+    #[init(node = "Timer")]
+    timer: OnReady<Gd<Timer>>,
+
     base: Base<Node2D>,
 }
 
@@ -25,11 +34,6 @@ const MONSTER_SPAWN_POSITION_X: f32 = 256.0;
 
 #[godot_api]
 impl GameManager {
-    #[signal]
-    fn game_start();
-    #[signal]
-    fn game_over();
-
     #[func]
     fn _on_timer_timeout(&self) {
         self.spawn_monster();
@@ -51,9 +55,8 @@ impl GameManager {
     }
 
     fn update_wait_time(&mut self, delta: f64) {
-        let mut timer = self.base().get_node_as::<Timer>("Timer");
-        let new_wait_time = timer.get_wait_time() - 0.2 * delta; // 计算新的等待时间
-        timer.set_wait_time(clampf(new_wait_time, 1.0, 3.0))
+        let new_wait_time = self.timer.get_wait_time() - 0.2 * delta; // 计算新的等待时间
+        self.timer.set_wait_time(clampf(new_wait_time, 1.0, 3.0))
     }
 
     fn update_score_label(&mut self) {
