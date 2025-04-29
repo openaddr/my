@@ -1,20 +1,29 @@
-[gd_scene load_steps=4 format=3 uid="uid://cyhn4j3l4o7fd"]
+[gd_scene load_steps=7 format=3 uid="uid://cyhn4j3l4o7fd"]
 
 [ext_resource type="Texture2D" uid="uid://cqp1w1fnrgo07" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_kln2b"]
 [ext_resource type="PackedScene" uid="uid://jxldlahj1y8j" path="res://Scenes/Player.tscn" id="2_rgh2o"]
 [ext_resource type="FontFile" uid="uid://bnxek6s3a4yjd" path="res://AssetBundle/HarmonyOS_Sans_SC_Regular.ttf" id="4_rgh2o"]
 
-[node name="GameManager" type="GameManager" node_paths=PackedStringArray("score_label", "game_over_label")]
-score_label = NodePath("CanvasLayer/Label")
-game_over_label = NodePath("CanvasLayer/Game Over")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kln2b"]
+size = Vector2(480, 19.296)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rgh2o"]
+size = Vector2(480, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbw6q"]
+size = Vector2(43.1416, 209.965)
+
+[node name="GameManager" type="GameManager"]
 y_sort_enabled = true
 
 [node name="Background 1" type="Sprite2D" parent="."]
+z_index = -1
 position = Vector2(-120, 0)
 texture = ExtResource("1_kln2b")
 metadata/_edit_lock_ = true
 
 [node name="Background 2" type="Sprite2D" parent="."]
+z_index = -1
 position = Vector2(120, 0)
 texture = ExtResource("1_kln2b")
 metadata/_edit_lock_ = true
@@ -60,5 +69,33 @@ theme_override_colors/font_outline_color = Color(0.402422, 0.624366, 0.313088, 1
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 120
 text = "游戏结束"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 145)
+shape = SubResource("RectangleShape2D_kln2b")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+position = Vector2(0, 8.5)
+shape = SubResource("RectangleShape2D_rgh2o")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+scale = Vector2(-0.482777, -1.39846)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(517.837, -5.00552)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_pbw6q")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+scale = Vector2(-0.482777, -1.39846)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+position = Vector2(-517.837, -4.55721)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_pbw6q")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

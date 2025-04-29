@@ -1,6 +1,5 @@
-[gd_scene load_steps=22 format=3 uid="uid://jxldlahj1y8j"]
+[gd_scene load_steps=21 format=3 uid="uid://jxldlahj1y8j"]
 
-[ext_resource type="PackedScene" uid="uid://cu665srasb1e0" path="res://Scenes/bullet.tscn" id="1_kyqiw"]
 [ext_resource type="Texture2D" uid="uid://d2rdvs3chn1ea" path="res://AssetBundle/Sprites/Foxy.png" id="1_rpqav"]
 [ext_resource type="AudioStream" uid="uid://b0mrsm25yswnu" path="res://AssetBundle/Audio/Gun.mp3" id="3_gntrk"]
 
@@ -137,7 +136,6 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_rpqav"]
 
 [node name="Player" type="Player"]
-bullet_scene = ExtResource("1_kyqiw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5ixxa")
