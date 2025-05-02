@@ -1,6 +1,5 @@
-use crate::game::{GameState, global, global_mut};
-use crate::game_manager::GameManager;
-use gdext_coroutines::prelude::{StartCoroutine, seconds};
+use crate::game::{global, global_mut, GameState};
+use gdext_coroutines::prelude::{seconds, StartCoroutine};
 use godot::classes::*;
 use godot::obj::WithBaseField;
 use godot::prelude::*;
@@ -57,25 +56,16 @@ impl Player {
                 global_mut().score = 0;
             },
         );
-        let mut gm = self
-            .base()
-            .get_tree()
-            .unwrap()
-            .get_current_scene()
-            .unwrap()
-            .cast::<GameManager>();
         let collision = self.collision.to_godot();
         self.base_mut().remove_child(&collision);
         self.animator.set_animation("over");
         global_mut().state = GameState::Over;
-        gm.bind_mut().show_game_over();
     }
 }
 
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn physics_process(&mut self, _: f64) {
-        // todo 移动范围需要限制
         if global().state == GameState::Over {
             return;
         }

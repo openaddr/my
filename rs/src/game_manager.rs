@@ -1,11 +1,9 @@
-use crate::game::{global, GameState};
+use crate::game::global;
 use crate::monster::Monster;
 use crate::player::Player;
-use godot::classes::{Label, Timer};
+use godot::classes::{Area2D, Label, Timer};
 use godot::global::{clampf, randf_range};
 use godot::prelude::*;
-use smol::lock::RwLock;
-use std::sync::LazyLock;
 
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
@@ -25,6 +23,9 @@ pub struct GameManager {
     #[init(node = "Timer")]
     timer: OnReady<Gd<Timer>>,
 
+    #[init(node = "WillGameOver")]
+    will_game_over: OnReady<Gd<Area2D>>, // 怪物进入到这个区域后，游戏结束
+
     base: Base<Node2D>,
 }
 
@@ -39,8 +40,15 @@ impl GameManager {
         self.spawn_monster();
     }
 
+    #[func]
+    fn _on_monster_entered(&mut self, &area: Gd<Area2D>) {
+        if area.is_in_group("monster") {
+            self.player.bind_mut().over();
+            self.show_game_over();
+        }
+    }
+
     fn spawn_monster(&self) {
-        godot_print!("生成怪物");
         let mut monster = self.monster_scene.instantiate_as::<Monster>();
         monster.set_position(Vector2::new(
             MONSTER_SPAWN_POSITION_X,
@@ -65,7 +73,7 @@ impl GameManager {
     }
 
     pub fn show_game_over(&mut self) {
-        self.game_over_label.clone().set_visible(true);
+        self.game_over_label.to_godot().set_visible(true);
     }
 }
 

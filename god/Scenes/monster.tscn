@@ -123,7 +123,7 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iyrhi"]
 
-[node name="Monster" type="Monster"]
+[node name="Monster" type="Monster" groups=["monster"]]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_481d3")

@@ -1,5 +1,6 @@
 use crate::game::global_mut;
 
+use crate::game_manager::GameManager;
 use crate::player::Player;
 use godot::classes::*;
 use godot::prelude::*;
@@ -23,6 +24,14 @@ impl Monster {
     fn _on_body_entered(&mut self, body: Gd<Node2D>) {
         if let Ok(mut player) = body.try_cast::<Player>() {
             player.bind_mut().over();
+            let mut gm = self
+                .base()
+                .get_tree()
+                .unwrap()
+                .get_current_scene()
+                .unwrap()
+                .cast::<GameManager>();
+            gm.bind_mut().show_game_over()
         }
     }
 

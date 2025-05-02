@@ -70,32 +70,40 @@ theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 120
 text = "游戏结束"
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Buttom" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Buttom"]
 position = Vector2(0, 145)
 shape = SubResource("RectangleShape2D_kln2b")
 
-[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+[node name="Top" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top"]
 position = Vector2(0, 8.5)
 shape = SubResource("RectangleShape2D_rgh2o")
 
-[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+[node name="Left" type="StaticBody2D" parent="."]
 scale = Vector2(-0.482777, -1.39846)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
 position = Vector2(517.837, -5.00552)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_pbw6q")
 
-[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+[node name="Right" type="StaticBody2D" parent="."]
 scale = Vector2(-0.482777, -1.39846)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
 position = Vector2(-517.837, -4.55721)
-scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_pbw6q")
+
+[node name="WillGameOver" type="Area2D" parent="."]
+position = Vector2(3.05176e-05, -4.76837e-07)
+rotation = 3.14159
+scale = Vector2(0.482777, 1.39846)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WillGameOver"]
+position = Vector2(517.837, -5.00552)
 shape = SubResource("RectangleShape2D_pbw6q")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="area_entered" from="WillGameOver" to="." method="_on_monster_entered"]
